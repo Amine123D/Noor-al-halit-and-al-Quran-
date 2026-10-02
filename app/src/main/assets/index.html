@@ -1,62 +1,1267 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0c5b49"><title>نور | القرآن الكريم والأحاديث</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c5b49">
+<title>نور | القرآن الكريم والأحاديث</title>
+
 <style>
 :root{--green:#0c5b49;--gold:#d9b56d;--bg:#f4f7f3;--card:#fff;--ink:#19332d;--muted:#687c75}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}header{background:linear-gradient(125deg,#073f35,#14765b);color:white;padding:22px max(18px,calc((100% - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}h1{margin:0;font-size:25px}header p{margin:7px 0 0;color:#d9eee6}.wrap{max-width:1100px;margin:22px auto;padding:0 15px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab,button,select,input{font:inherit}.tab,button{border:0;border-radius:11px;padding:11px 15px;background:#e4eee8;color:var(--green);cursor:pointer;font-weight:bold}.tab.active,button.primary{background:var(--green);color:white}.panel{background:var(--card);border:1px solid #e2eae4;border-radius:17px;padding:18px;margin-bottom:16px;box-shadow:0 5px 20px #163f3010}.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.controls input,.controls select{border:1px solid #d5e1d9;border-radius:10px;padding:11px;background:white;min-width:130px;flex:1;color:var(--ink)}.layout{display:grid;grid-template-columns:280px 1fr;gap:15px}.surahs{max-height:65vh;overflow:auto}.surah{display:flex;justify-content:space-between;padding:11px;border-bottom:1px solid #edf1ed;cursor:pointer;border-radius:8px}.surah:hover,.surah.selected{background:#eaf4ed;color:var(--green)}.arabic{font-family:"Amiri","Traditional Arabic",serif;font-size:25px;line-height:2.1;text-align:justify}.ayah{padding:13px 7px;border-bottom:1px dashed #d8e3dc}.basmala{text-align:center;font-size:28px;color:var(--green);border-bottom:0;padding-bottom:4px}.num{display:inline-flex;border:1px solid var(--gold);border-radius:50%;width:30px;height:30px;align-items:center;justify-content:center;font:14px Tahoma;color:#99702e;margin:0 6px}.small{font-size:13px;color:var(--muted)}.hidden{display:none!important}.hadith{line-height:2;font-size:20px}.notice{background:#fff7e6;border-right:4px solid var(--gold);padding:12px;border-radius:8px;color:#644e25}.status{min-height:22px;color:var(--muted);font-size:13px}audio{width:100%;margin-top:12px}.sourceLink{display:inline-block;color:var(--green);font-weight:bold;text-decoration:none;margin:3px 6px}.sourceLink:hover{text-decoration:underline}.pill{display:inline-block;background:#eef5ef;padding:5px 9px;border-radius:20px;font-size:12px;color:var(--green)}footer{text-align:center;color:var(--muted);padding:22px;font-size:13px}@media(max-width:700px){.layout{grid-template-columns:1fr}.surahs{max-height:230px}.arabic{font-size:23px}header{padding:20px}.wrap{margin-top:14px}}
-</style></head>
-<body>
-<header><div><h1>☾ نور — القرآن الكريم</h1><p>تلاوة، تدبّر، وأحاديث نبوية</p></div><span class="pill">يدعم الهاتف والحاسوب</span></header>
-<main class="wrap">
-<div class="tabs"><button class="tab active" data-tab="quran">القرآن الكريم</button><button class="tab" data-tab="hadith">الأحاديث</button><button class="tab" data-tab="offline">المحفوظات دون إنترنت</button></div>
-<section id="quran">
-<div class="panel controls"><input id="search" placeholder="ابحث عن سورة أو آية أو كلمة..." aria-label="بحث"><select id="reciter" aria-label="القارئ"><option value="ar.alafasy">مشاري العفاسي</option><option value="ar.abdurrahmaansudais">عبدالرحمن السديس</option><option value="ar.mahermuaiqly">ماهر المعيقلي</option><option value="ar.husary">محمود خليل الحصري</option><option value="ar.minshawi">محمد صديق المنشاوي</option><option value="ar.shaatree">أبو بكر الشاطري</option></select><button id="saveSurah">حفظ السورة أوفلاين</button></div>
-<div class="layout"><aside class="panel"><b>فهرس السور</b><div id="surahs" class="surahs small">جارٍ تحميل الفهرس…</div></aside><article class="panel"><div id="surahTitle"><h2>مرحباً بك في نور</h2><p class="small">اختر سورة من الفهرس لبدء القراءة والاستماع.</p></div><div class="controls"><select id="recitationMode" aria-label="طريقة التلاوة"><option value="all">تلاوة السورة كاملة</option><option value="ayah">اختيار آية</option></select><select id="ayahSelect" aria-label="اختر الآية" disabled><option>اختر السورة أولاً</option></select><button id="play" class="primary">▶ تشغيل التلاوة</button><button id="downloadAudio">⬇ تحميل الصوت</button></div><audio id="audio" controls></audio><div id="ayahs" class="arabic" aria-live="polite"></div><div id="qstatus" class="status"></div></article></div>
-</section>
-<section id="hadith" class="hidden"><div class="panel"><h2>الأحاديث النبوية</h2><p class="notice">تُعرض هنا أحاديث مختارة مع بيان المصدر. لا تُعد هذه الصفحة موسوعة شاملة لكل الأحاديث الصحيحة؛ فالحكم على الحديث يُراجع في مصادر التخريج المعتمدة.</p><div class="controls"><input id="hsearch" placeholder="ابحث في نص الحديث أو كلماته"><select id="hcollection" aria-label="المصدر"><option value="">كل الأحاديث</option><option value="البخاري">صحيح البخاري</option><option value="مسلم">صحيح مسلم</option><option value="البخاري ومسلم">البخاري ومسلم</option></select><button id="hfind" class="primary">بحث</button></div><div id="hadithResults"></div></div></section>
-<section id="offline" class="hidden"><div class="panel"><h2>المحتوى المحفوظ على هذا الجهاز</h2><p class="small">يمكنك فتح السور المحفوظة وقراءتها دون اتصال. حفظ الصوت يعتمد على مساحة الجهاز ودعم المتصفح.</p><div id="savedList"></div><button id="clearSaved">حذف جميع المحفوظات</button></div></section>
-<footer>مصدر نص القرآن والتلاوات: واجهة AlQuran Cloud. تحقّق من النص بالرسم المعتمد في مصحف موثوق عند الطباعة أو الاستخدام التعبدي.</footer>
-</main>
-<script>
-const API='https://api.alquran.cloud/v1', names=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
-const hadiths=[
-{t:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى، فَمَنْ كَانَتْ هِجْرَتُهُ إِلَى دُنْيَا يُصِيبُهَا أَوْ إِلَى امْرَأَةٍ يَنْكِحُهَا فَهِجْرَتُهُ إِلَى مَا هَاجَرَ إِلَيْهِ.',s:'صحيح البخاري، حديث 1؛ صحيح مسلم، حديث 1907a',k:'النية الأعمال الهجرة',c:'البخاري ومسلم',u:'https://sunnah.com/bukhari/1/1',mu:'https://sunnah.com/muslim/33/222'},
-{t:'لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ - أَوْ قَالَ لِجَارِهِ - مَا يُحِبُّ لِنَفْسِهِ.',s:'صحيح البخاري، حديث 13؛ صحيح مسلم، حديث 45a',k:'الإيمان الأخوة الجار',c:'البخاري ومسلم',u:'https://sunnah.com/bukhari:13',mu:'https://sunnah.com/muslim/1/77'},
-{t:'الدِّينُ النَّصِيحَةُ. قُلْنَا: لِمَنْ؟ قَالَ: لِلَّهِ، وَلِكِتَابِهِ، وَلِرَسُولِهِ، وَلِأَئِمَّةِ الْمُسْلِمِينَ وَعَامَّتِهِمْ.',s:'صحيح مسلم، حديث 55a',k:'النصيحة الدين',c:'مسلم',u:'https://sunnah.com/muslim:55a'},
-{t:'يَسِّرُوا وَلاَ تُعَسِّرُوا، وَبَشِّرُوا وَلاَ تُنَفِّرُوا.',s:'صحيح البخاري، حديث 69',k:'التيسير الدعوة',c:'البخاري',u:'https://sunnah.com/bukhari:69'},
-{t:'يَسِّرُوا وَلاَ تُعَسِّرُوا وَسَكِّنُوا وَلاَ تُنَفِّرُوا.',s:'صحيح مسلم، حديث 1734',k:'التيسير الدعوة',c:'مسلم',u:'https://sunnah.com/muslim:1734'},
-{t:'مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ، وَمَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيُكْرِمْ ضَيْفَهُ.',s:'صحيح البخاري، حديث 6018؛ صحيح مسلم، حديث 47b',k:'الكلام الصمت الضيف',c:'البخاري ومسلم',u:'https://sunnah.com/bukhari:6018',mu:'https://sunnah.com/muslim/1/81'},
-{t:'الطُّهُورُ شَطْرُ الإِيمَانِ، وَالْحَمْدُ لِلَّهِ تَمْلَأُ الْمِيزَانَ، وَسُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ تَمْلَآنِ مَا بَيْنَ السَّمَاوَاتِ وَالأَرْضِ، وَالصَّلَاةُ نُورٌ، وَالصَّدَقَةُ بُرْهَانٌ، وَالصَّبْرُ ضِيَاءٌ، وَالْقُرْآنُ حُجَّةٌ لَكَ أَوْ عَلَيْكَ.',s:'صحيح مسلم، حديث 223',k:'الطهارة الإيمان الصلاة القرآن الصبر',c:'مسلم',u:'https://sunnah.com/muslim/2/1'},
-{t:'مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ.',s:'صحيح مسلم، حديث 2699a',k:'العلم طلب العلم الجنة',c:'مسلم',u:'https://sunnah.com/muslim/48/48'},
-{t:'وَالْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ، وَكُلُّ خَطْوَةٍ تَمْشِيهَا إِلَى الصَّلَاةِ صَدَقَةٌ، وَتُمِيطُ الأَذَى عَنِ الطَّرِيقِ صَدَقَةٌ.',s:'صحيح البخاري، حديث 2989؛ صحيح مسلم، حديث 1009',k:'الصدقة الكلمة الطيبة الصلاة',c:'البخاري ومسلم',u:'https://sunnah.com/bukhari/56/198',mu:'https://sunnah.com/muslim/12/72'},
-{t:'إِنَّ الصِّدْقَ يَهْدِي إِلَى الْبِرِّ، وَإِنَّ الْبِرَّ يَهْدِي إِلَى الْجَنَّةِ، وَإِنَّ الرَّجُلَ لَيَصْدُقُ حَتَّى يَكُونَ صِدِّيقًا، وَإِنَّ الْكَذِبَ يَهْدِي إِلَى الْفُجُورِ، وَإِنَّ الْفُجُورَ يَهْدِي إِلَى النَّارِ.',s:'صحيح البخاري، حديث 6094',k:'الصدق الكذب البر',c:'البخاري',u:'https://sunnah.com/bukhari/78/69'},
-{t:'الدُّنْيَا سِجْنُ الْمُؤْمِنِ وَجَنَّةُ الْكَافِرِ.',s:'صحيح مسلم، حديث 2956',k:'الدنيا المؤمن',c:'مسلم',u:'https://sunnah.com/muslim/55/1'}
-];
-let all=[],current=1,curData=null,curDisplayAyahs=[],audioUrl='',audioList=[],playIndex=0;
-const $=id=>document.getElementById(id), norm=s=>(s||'').normalize('NFD').replace(/[\u064B-\u065F\u0670ـ]/g,'').replace(/[أإآ]/g,'ا').trim().toLowerCase();
-function tab(name){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));['quran','hadith','offline'].forEach(x=>$(x).classList.toggle('hidden',x!==name));if(name==='offline')renderSaved()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
-async function init(){try{let r=await fetch(API+'/surah');if(!r.ok)throw 0;let j=await r.json();all=j.data;renderList(all);loadSurah(1)}catch(e){$('surahs').textContent='تعذر الاتصال. اتصل بالإنترنت أول مرة لتحميل الفهرس.';}}
-function renderList(arr){$('surahs').innerHTML='';arr.forEach(s=>{let d=document.createElement('div');d.className='surah'+(s.number===current?' selected':'');d.innerHTML=`<span>${s.number}. ${s.name||names[s.number-1]}</span><span>${s.numberOfAyahs||''}</span>`;d.onclick=()=>loadSurah(s.number);$('surahs').appendChild(d)})}
-$('search').addEventListener('input',e=>{let q=norm(e.target.value);renderList(all.filter(s=>norm((s.name||'')+' '+names[s.number-1]+' '+s.number).includes(q)));if(q.length>2)searchAyah(q)});
-async function searchAyah(q){try{let r=await fetch(API+'/search/'+encodeURIComponent(q)+'/all/ar');let j=await r.json();if(j.data&&j.data.matches.length){$('qstatus').textContent='نتائج البحث في الآيات:';$('ayahs').innerHTML=j.data.matches.slice(0,30).map(a=>`<div class="ayah"><span class="small">${a.surah.name} — آية ${a.numberInSurah}</span><br>${a.text}</div>`).join('')}}catch{}}
-async function loadSurah(n){current=n;$('qstatus').textContent='جارٍ تحميل السورة…';$('ayahs').innerHTML='';let cached=localStorage.getItem('quran_'+n);try{let data;if(cached)data=JSON.parse(cached);else{let r=await fetch(API+'/surah/'+n+'/quran-uthmani');if(!r.ok)throw 0;data=(await r.json()).data;localStorage.setItem('quran_'+n,JSON.stringify(data))}curData=data;$('surahTitle').innerHTML=`<h2>${data.name} <span class="small">(${data.englishName||''})</span></h2><span class="pill">${data.numberOfAyahs} آية · ${data.revelationType==='Meccan'?'مكية':'مدنية'}</span>`;let basmala=(n!==9)?`<div class="ayah basmala"><span>بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span></div>`:'';const normalizeBasmala=v=>(v||'').normalize('NFD').replace(/[\u064B-\u065F\u0670]/g,'').replace(/ـ/g,'').replace(/ٱ/g,'ا').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/\s+/g,'').trim();const b=normalizeBasmala('بسم الله الرحمن الرحيم');let displayAyahs=[];if(n===9){displayAyahs=data.ayahs.map(a=>({text:(a.text||'').trim(),number:a.numberInSurah}));}else{for(const a of data.ayahs){let x=(a.text||'').trim();let z=x.split(/\s+/);let acc=[],joined='';for(let i=0;i<Math.min(z.length,8);i++){acc.push(z[i]);joined=normalizeBasmala(acc.join(' '));if(joined===b){z=z.slice(i+1);break}}x=z.join(' ').trim();if(x)displayAyahs.push({text:x,number:displayAyahs.length+1});}}$('ayahs').innerHTML=basmala+displayAyahs.map(a=>`<span class="ayahText">${a.text} <span class="num">${a.number.toLocaleString('ar')}</span></span> `).join('');curDisplayAyahs=displayAyahs;fillAyahSelect();$('qstatus').textContent='تم تحميل النص'+(cached?' من ذاكرة الجهاز':'');document.querySelectorAll('.surah').forEach((el,i)=>el.classList.toggle('selected',i===n-1));setAudio()}catch(e){$('qstatus').textContent='تعذر تحميل السورة. تحقق من الإنترنت.'}}
-function fillAyahSelect(){if(!curDisplayAyahs.length)return;let sel=$('ayahSelect');sel.innerHTML=curDisplayAyahs.map((a,i)=>`<option value="${i}">الآية ${a.number.toLocaleString('ar')}</option>`).join('');sel.disabled=$('recitationMode').value!=='ayah'}
-async function setAudio(){if(!curData)return;try{let r=await fetch(API+'/surah/'+current+'/'+$('reciter').value);let j=await r.json();audioList=j.data.ayahs.map(a=>a.audio);audioUrl=audioList[0]||'';playIndex=0;$('audio').src=audioUrl}catch{$('qstatus').textContent='تعذر تجهيز التلاوة'}}
-$('reciter').onchange=setAudio;$('recitationMode').onchange=()=>{$('ayahSelect').disabled=$('recitationMode').value!=='ayah'};$('play').onclick=async()=>{if(!audioList.length)await setAudio();if(!audioList.length)return;playIndex=$('recitationMode').value==='ayah'?Math.max(0,Number($('ayahSelect').value)):0;$('audio').src=audioList[playIndex];$('audio').play()};$('audio').onended=()=>{if($('recitationMode').value==='all'&&playIndex<audioList.length-1){playIndex++;$('audio').src=audioList[playIndex];$('audio').play()}};$('downloadAudio').onclick=async()=>{if(!audioUrl)return;let b=$('downloadAudio');b.disabled=true;b.textContent='جارٍ التحميل…';try{let r=await fetch(audioUrl);let blob=await r.blob();let key='audio_'+current+'_'+$('reciter').value;await new Promise((resolve,reject)=>{let req=indexedDB.open('NoorOffline',1);req.onupgradeneeded=()=>req.result.createObjectStore('audio');req.onsuccess=()=>{let db=req.result,tx=db.transaction('audio','readwrite');tx.objectStore('audio').put(blob,key);tx.oncomplete=resolve;tx.onerror=reject};req.onerror=reject});alert('تم حفظ التلاوة على هذا الجهاز')}catch(e){alert('لم ينجح الحفظ؛ قد يمنع الخادم تنزيل الصوت أو لا يدعم المتصفح ذلك.')}finally{b.disabled=false;b.textContent='⬇ تحميل الصوت'}};
-$('saveSurah').onclick=()=>{if(!curData)return;localStorage.setItem('quran_'+current,JSON.stringify(curData));let s=JSON.parse(localStorage.getItem('saved')||'[]');if(!s.includes(current))s.push(current);localStorage.setItem('saved',JSON.stringify(s));$('qstatus').textContent='حُفظ نص السورة على الجهاز للقراءة دون إنترنت.';};
-function renderSaved(){let s=JSON.parse(localStorage.getItem('saved')||'[]');$('savedList').innerHTML=s.length?s.map(n=>`<div class="surah"><span>${n}. ${names[n-1]}</span><button onclick="loadSurah(${n});tab('quran')">فتح</button></div>`).join(''):'لا توجد سور محفوظة بعد.'}
-$('clearSaved').onclick=()=>{if(confirm('حذف فهرس السور المحفوظة؟')){localStorage.removeItem('saved');renderSaved()}};
-function showHadith(q=''){
-let col=$('hcollection').value;
-let res=hadiths.filter(h=>(!col||h.c===col||((col==='البخاري'||col==='مسلم')&&h.c==='البخاري ومسلم'))&&norm(h.t+' '+h.s+' '+h.k).includes(norm(q)));
-$('hadithResults').innerHTML=res.length?res.map((h,i)=>{
-let links=`<a href="${h.u}" target="_blank" rel="noopener" class="sourceLink">مصدر ${h.c==='مسلم'?'صحيح مسلم':'صحيح البخاري'}</a>`+(h.mu?` <a href="${h.mu}" target="_blank" rel="noopener" class="sourceLink">مصدر مسلم</a>`:'');
-return `<div class="ayah"><span class="pill">حديث ${i+1}</span> <span class="pill">${h.c}</span><p class="hadith">${h.t}</p><p class="small">المصدر: ${h.s}</p><p>${links}</p></div>`
-}).join(''):'لا توجد نتائج ضمن الأحاديث المختارة.'
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}
+header{background:linear-gradient(125deg,#073f35,#14765b);color:white;padding:22px max(18px,calc((100% - 1100px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+h1{margin:0;font-size:25px}
+header p{margin:7px 0 0;color:#d9eee6}
+.wrap{max-width:1100px;margin:22px auto;padding:0 15px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tab,button,select,input{font:inherit}
+.tab,button{border:0;border-radius:11px;padding:11px 15px;background:#e4eee8;color:var(--green);cursor:pointer;font-weight:bold}
+.tab.active,button.primary{background:var(--green);color:white}
+.panel{background:var(--card);border:1px solid #e2eae4;border-radius:17px;padding:18px;margin-bottom:16px;box-shadow:0 5px 20px #163f3010}
+.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.controls input,.controls select{border:1px solid #d5e1d9;border-radius:10px;padding:11px;background:white;min-width:130px;flex:1;color:var(--ink)}
+.layout{display:grid;grid-template-columns:280px 1fr;gap:15px}
+.surahs{max-height:65vh;overflow:auto}
+.surah{display:flex;justify-content:space-between;align-items:center;padding:11px;border-bottom:1px solid #edf1ed;cursor:pointer;border-radius:8px}
+.surah:hover,.surah.selected{background:#eaf4ed;color:var(--green)}
+.arabic{font-family:"Amiri","Traditional Arabic",serif;font-size:25px;line-height:2.1;text-align:justify}
+.ayah{padding:13px 7px;border-bottom:1px dashed #d8e3dc}
+.basmala{text-align:center;font-size:28px;color:var(--green);border-bottom:0;padding-bottom:4px}
+.num{display:inline-flex;border:1px solid var(--gold);border-radius:50%;width:30px;height:30px;align-items:center;justify-content:center;font:14px Tahoma;color:#99702e;margin:0 6px}
+.small{font-size:13px;color:var(--muted)}
+.hidden{display:none!important}
+.hadith{line-height:2;font-size:20px}
+.notice{background:#fff7e6;border-right:4px solid var(--gold);padding:12px;border-radius:8px;color:#644e25}
+.status{min-height:22px;color:var(--muted);font-size:13px}
+.progress{height:7px;background:#e8eee9;border-radius:10px;overflow:hidden;margin-top:10px}
+.progress>div{height:100%;width:0;background:var(--green);transition:width .2s}
+audio{width:100%;margin-top:12px}
+.sourceLink{display:inline-block;color:var(--green);font-weight:bold;text-decoration:none;margin:3px 6px}
+.sourceLink:hover{text-decoration:underline}
+.pill{display:inline-block;background:#eef5ef;padding:5px 9px;border-radius:20px;font-size:12px;color:var(--green)}
+footer{text-align:center;color:var(--muted);padding:22px;font-size:13px}
+@media(max-width:700px){
+.layout{grid-template-columns:1fr}
+.surahs{max-height:230px}
+.arabic{font-size:23px}
+header{padding:20px}
+.wrap{margin-top:14px}
 }
-$('hfind').onclick=()=>showHadith($('hsearch').value);$('hsearch').oninput=()=>showHadith($('hsearch').value);$('hcollection').onchange=()=>showHadith($('hsearch').value);
-init();showHadith();
-</script></body></html>
+</style>
+</head>
+
+<body>
+
+<header>
+<div>
+<h1>☾ نور — القرآن الكريم</h1>
+<p>تلاوة، تدبّر، وأحاديث نبوية</p>
+</div>
+<span class="pill">يدعم الهاتف والحاسوب</span>
+</header>
+
+<main class="wrap">
+
+<div class="tabs">
+<button class="tab active" data-tab="quran">القرآن الكريم</button>
+<button class="tab" data-tab="hadith">الأحاديث</button>
+<button class="tab" data-tab="offline">المحفوظات دون إنترنت</button>
+</div>
+
+<section id="quran">
+
+<div class="panel controls">
+<input id="search" placeholder="ابحث عن سورة أو آية أو كلمة..." aria-label="بحث">
+
+<select id="reciter" aria-label="القارئ">
+<option value="ar.alafasy">مشاري العفاسي</option>
+<option value="ar.abdurrahmaansudais">عبدالرحمن السديس</option>
+<option value="ar.mahermuaiqly">ماهر المعيقلي</option>
+<option value="ar.husary">محمود خليل الحصري</option>
+<option value="ar.minshawi">محمد صديق المنشاوي</option>
+<option value="ar.shaatree">أبو بكر الشاطري</option>
+</select>
+
+<button id="saveSurah">💾 حفظ السورة أوفلاين</button>
+<button id="downloadText">⬇ تنزيل نص السورة</button>
+</div>
+
+<div class="layout">
+
+<aside class="panel">
+<b>فهرس السور</b>
+<div id="surahs" class="surahs small">جارٍ تحميل الفهرس…</div>
+</aside>
+
+<article class="panel">
+
+<div id="surahTitle">
+<h2>مرحباً بك في نور</h2>
+<p class="small">اختر سورة من الفهرس لبدء القراءة والاستماع.</p>
+</div>
+
+<div class="controls">
+
+<select id="recitationMode" aria-label="طريقة التلاوة">
+<option value="all">تلاوة السورة كاملة</option>
+<option value="ayah">اختيار آية</option>
+</select>
+
+<select id="ayahSelect" aria-label="اختر الآية" disabled>
+<option>اختر السورة أولاً</option>
+</select>
+
+<button id="play" class="primary">▶ تشغيل التلاوة</button>
+<button id="downloadAudio">⬇ تحميل صوت السورة</button>
+
+</div>
+
+<audio id="audio" controls></audio>
+
+<div id="audioProgress" class="progress hidden">
+<div></div>
+</div>
+
+<div id="ayahs" class="arabic" aria-live="polite"></div>
+
+<div id="qstatus" class="status"></div>
+
+</article>
+</div>
+
+</section>
+
+
+<section id="hadith" class="hidden">
+
+<div class="panel">
+
+<h2>الأحاديث النبوية</h2>
+
+<p class="notice">
+تُستخدم هنا قاعدة البيانات المثبتة في إصدار التطبيق، وتحتوي على أحاديث صحيح البخاري وصحيح مسلم المتاحة في المصدر.
+</p>
+
+<div class="controls">
+
+<input id="hsearch" placeholder="ابحث في نص الحديث أو كلماته">
+
+<select id="hcollection" aria-label="المصدر">
+<option value="">كل الأحاديث</option>
+<option value="البخاري">صحيح البخاري</option>
+<option value="مسلم">صحيح مسلم</option>
+</select>
+
+<button id="hfind" class="primary">بحث</button>
+
+<button id="downloadHadith">⬇ تنزيل الأحاديث</button>
+
+</div>
+
+<div id="hadithStatus" class="status">
+جارٍ تحميل قاعدة الأحاديث…
+</div>
+
+<div id="hadithResults"></div>
+
+</div>
+
+</section>
+
+
+<section id="offline" class="hidden">
+
+<div class="panel">
+
+<h2>المحتوى المحفوظ على هذا الجهاز</h2>
+
+<p class="small">
+يمكنك فتح السور المحفوظة وقراءتها دون اتصال.
+</p>
+
+<div id="savedList"></div>
+
+<button id="clearSaved">حذف جميع المحفوظات</button>
+
+</div>
+
+</section>
+
+
+<footer>
+مصدر نص القرآن والتلاوات: واجهة AlQuran Cloud.
+تحقّق من النص بالرسم المعتمد في مصحف موثوق عند الطباعة أو الاستخدام التعبدي.
+</footer>
+
+</main>
+
+
+<script>
+
+const API='https://api.alquran.cloud/v1';
+
+const names=[
+'الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف',
+'الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل',
+'الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور',
+'الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة',
+'الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى',
+'الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق',
+'الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة',
+'الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم',
+'الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة',
+'الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار',
+'المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد',
+'الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة',
+'العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون',
+'الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'
+];
+
+
+/* =========================
+   الحالة العامة
+========================= */
+
+let all=[];
+let current=1;
+let curData=null;
+let curDisplayAyahs=[];
+let audioList=[];
+let playIndex=0;
+
+let hadiths=[];
+let hadithLoaded=false;
+
+
+/* =========================
+   أدوات
+========================= */
+
+const $=id=>document.getElementById(id);
+
+const norm=s=>
+(s||'')
+.normalize('NFD')
+.replace(/[\u064B-\u065F\u0670ـ]/g,'')
+.replace(/[أإآ]/g,'ا')
+.trim()
+.toLowerCase();
+
+
+/* =========================
+   التنقل
+========================= */
+
+function tab(name){
+
+document.querySelectorAll('.tab').forEach(b=>
+b.classList.toggle('active',b.dataset.tab===name)
+);
+
+['quran','hadith','offline'].forEach(x=>
+$(x).classList.toggle('hidden',x!==name)
+);
+
+if(name==='offline') renderSaved();
+
+if(name==='hadith' && !hadithLoaded){
+loadHadithDatabase();
+}
+
+}
+
+
+/* =========================
+   القرآن
+========================= */
+
+async function init(){
+
+try{
+
+let r=await fetch(API+'/surah');
+
+if(!r.ok) throw new Error('surah list failed');
+
+let j=await r.json();
+
+all=j.data;
+
+renderList(all);
+
+loadSurah(1);
+
+}catch(e){
+
+$('surahs').textContent=
+'تعذر الاتصال. اتصل بالإنترنت أول مرة لتحميل الفهرس.';
+
+}
+
+}
+
+
+function renderList(arr){
+
+$('surahs').innerHTML='';
+
+arr.forEach(s=>{
+
+let d=document.createElement('div');
+
+d.className=
+'surah'+(s.number===current?' selected':'');
+
+d.innerHTML=
+`<span>${s.number}. ${s.name||names[s.number-1]}</span>
+<span>${s.numberOfAyahs||''}</span>`;
+
+d.onclick=()=>loadSurah(s.number);
+
+$('surahs').appendChild(d);
+
+});
+
+}
+
+
+$('search').addEventListener('input',e=>{
+
+let q=norm(e.target.value);
+
+renderList(
+all.filter(s=>
+norm(
+(s.name||'')+' '+names[s.number-1]+' '+s.number
+).includes(q)
+)
+);
+
+if(q.length>2) searchAyah(q);
+
+});
+
+
+async function searchAyah(q){
+
+try{
+
+let r=await fetch(
+API+'/search/'+encodeURIComponent(q)+'/all/ar'
+);
+
+let j=await r.json();
+
+if(j.data&&j.data.matches.length){
+
+$('qstatus').textContent='نتائج البحث في الآيات:';
+
+$('ayahs').innerHTML=
+j.data.matches.slice(0,30).map(a=>
+`<div class="ayah">
+<span class="small">
+${a.surah.name} — آية ${a.numberInSurah}
+</span>
+<br>
+${a.text}
+</div>`
+).join('');
+
+}
+
+}catch{}
+
+}
+
+
+/* =========================
+   تحميل السورة
+========================= */
+
+async function loadSurah(n){
+
+current=n;
+
+$('qstatus').textContent='جارٍ تحميل السورة…';
+
+$('ayahs').innerHTML='';
+
+let cached=localStorage.getItem('quran_'+n);
+
+try{
+
+let data;
+
+if(cached){
+
+data=JSON.parse(cached);
+
+}else{
+
+let r=await fetch(
+API+'/surah/'+n+'/quran-uthmani'
+);
+
+if(!r.ok) throw new Error('quran failed');
+
+data=(await r.json()).data;
+
+localStorage.setItem(
+'quran_'+n,
+JSON.stringify(data)
+);
+
+}
+
+curData=data;
+
+$('surahTitle').innerHTML=
+`<h2>
+${data.name}
+<span class="small">(${data.englishName||''})</span>
+</h2>
+<span class="pill">
+${data.numberOfAyahs} آية ·
+${data.revelationType==='Meccan'?'مكية':'مدنية'}
+</span>`;
+
+
+let basmala=
+(n!==9)?
+`<div class="ayah basmala">
+بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+</div>`:'';
+
+
+const normalizeBasmala=v=>
+(v||'')
+.normalize('NFD')
+.replace(/[\u064B-\u065F\u0670]/g,'')
+.replace(/ـ/g,'')
+.replace(/ٱ/g,'ا')
+.replace(/[أإآ]/g,'ا')
+.replace(/ى/g,'ي')
+.replace(/ؤ/g,'و')
+.replace(/ئ/g,'ي')
+.replace(/\s+/g,'')
+.trim();
+
+
+const b=
+normalizeBasmala(
+'بسم الله الرحمن الرحيم'
+);
+
+
+let displayAyahs=[];
+
+
+if(n===9){
+
+data.ayahs.forEach(a=>{
+
+displayAyahs.push({
+text:(a.text||'').trim(),
+number:a.numberInSurah
+});
+
+});
+
+}else{
+
+for(const a of data.ayahs){
+
+let x=(a.text||'').trim();
+
+let z=x.split(/\s+/);
+
+let acc=[];
+let found=false;
+
+for(let i=0;i<Math.min(z.length,8);i++){
+
+acc.push(z[i]);
+
+let joined=
+normalizeBasmala(acc.join(' '));
+
+if(joined===b){
+
+z=z.slice(i+1);
+found=true;
+break;
+
+}
+
+}
+
+x=z.join(' ').trim();
+
+if(x){
+
+displayAyahs.push({
+text:x,
+number:displayAyahs.length+1
+});
+
+}
+
+}
+
+}
+
+
+$('ayahs').innerHTML=
+basmala+
+displayAyahs.map(a=>
+`<span class="ayahText">
+${a.text}
+<span class="num">${a.number.toLocaleString('ar')}</span>
+</span> `
+).join('');
+
+
+curDisplayAyahs=displayAyahs;
+
+fillAyahSelect();
+
+$('qstatus').textContent=
+'تم تحميل النص'+
+(cached?' من ذاكرة الجهاز':'');
+
+document.querySelectorAll('.surah').forEach(el=>{
+el.classList.remove('selected');
+});
+
+let selected=
+Array.from(document.querySelectorAll('.surah'))
+.find(el=>
+el.textContent.trim().startsWith(n+'.')
+);
+
+if(selected) selected.classList.add('selected');
+
+await setAudio();
+
+}
+
+
+catch(e){
+
+$('qstatus').textContent=
+'تعذر تحميل السورة. تحقق من الإنترنت.';
+
+}
+
+}
+
+
+/* =========================
+   الآيات
+========================= */
+
+function fillAyahSelect(){
+
+if(!curDisplayAyahs.length) return;
+
+let sel=$('ayahSelect');
+
+sel.innerHTML=
+curDisplayAyahs.map((a,i)=>
+`<option value="${i}">
+الآية ${a.number.toLocaleString('ar')}
+</option>`
+).join('');
+
+sel.disabled=
+$('recitationMode').value!=='ayah';
+
+}
+
+
+/* =========================
+   الصوت
+========================= */
+
+async function setAudio(){
+
+if(!curData) return;
+
+try{
+
+let r=await fetch(
+API+'/surah/'+current+'/'+$('reciter').value
+);
+
+if(!r.ok) throw new Error('audio failed');
+
+let j=await r.json();
+
+audioList=
+j.data.ayahs.map(a=>a.audio).filter(Boolean);
+
+playIndex=0;
+
+$('audio').src=audioList[0]||'';
+
+$('qstatus').textContent=
+`تم تجهيز تلاوة السورة — ${audioList.length} مقطع`;
+
+}catch{
+
+$('qstatus').textContent=
+'تعذر تجهيز التلاوة';
+
+}
+
+}
+
+
+/* تغيير القارئ */
+
+$('reciter').onchange=async()=>{
+
+await setAudio();
+
+};
+
+
+/* تغيير الوضع */
+
+$('recitationMode').onchange=()=>{
+
+$('ayahSelect').disabled=
+$('recitationMode').value!=='ayah';
+
+};
+
+
+/* تشغيل السورة */
+
+$('play').onclick=async()=>{
+
+if(!audioList.length){
+
+await setAudio();
+
+}
+
+if(!audioList.length) return;
+
+if($('recitationMode').value==='ayah'){
+
+playIndex=
+Math.max(
+0,
+Number($('ayahSelect').value)
+);
+
+}else{
+
+playIndex=0;
+
+}
+
+$('audio').src=
+audioList[playIndex];
+
+try{
+
+await $('audio').play();
+
+}catch{}
+
+};
+
+
+/* الانتقال التلقائي بين الآيات */
+
+$('audio').onended=async()=>{
+
+if(
+$('recitationMode').value==='all' &&
+playIndex<audioList.length-1
+){
+
+playIndex++;
+
+$('audio').src=
+audioList[playIndex];
+
+try{
+await $('audio').play();
+}catch{}
+
+}else{
+
+$('qstatus').textContent=
+'انتهت تلاوة السورة.';
+
+}
+
+};
+
+
+/* =========================
+   تنزيل الصوت
+========================= */
+
+$('downloadAudio').onclick=async()=>{
+
+if(!audioList.length){
+
+await setAudio();
+
+}
+
+if(!audioList.length){
+
+alert('لم يتم تجهيز صوت السورة.');
+
+return;
+
+}
+
+let button=$('downloadAudio');
+
+button.disabled=true;
+
+button.textContent='جارٍ تجهيز تنزيل السورة…';
+
+let progress=$('audioProgress');
+
+let progressBar=
+progress.querySelector('div');
+
+progress.classList.remove('hidden');
+
+progressBar.style.width='0%';
+
+
+try{
+
+/*
+ Android Bridge:
+ يقوم الملف MainActivity.java القادم
+ باستعمال DownloadManager لتنزيل الملفات.
+*/
+
+if(
+window.NoorAndroid &&
+typeof window.NoorAndroid.downloadFile==='function'
+){
+
+for(let i=0;i<audioList.length;i++){
+
+let fileName=
+`Noor_${String(current).padStart(3,'0')}_${String(i+1).padStart(3,'0')}.mp3`;
+
+window.NoorAndroid.downloadFile(
+audioList[i],
+fileName,
+'audio/mpeg'
+);
+
+progressBar.style.width=
+Math.round(
+((i+1)/audioList.length)*100
+)+'%';
+
+}
+
+alert(
+'تم إرسال جميع مقاطع السورة إلى مدير التنزيل في الجهاز.'
+);
+
+}else{
+
+/*
+ نسخة المتصفح الاحتياطية.
+*/
+
+for(let i=0;i<audioList.length;i++){
+
+let response=
+await fetch(audioList[i]);
+
+if(!response.ok)
+throw new Error('download failed');
+
+let blob=
+await response.blob();
+
+let url=
+URL.createObjectURL(blob);
+
+let a=
+document.createElement('a');
+
+a.href=url;
+
+a.download=
+`Noor_${current}_${i+1}.mp3`;
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+URL.revokeObjectURL(url);
+
+progressBar.style.width=
+Math.round(
+((i+1)/audioList.length)*100
+)+'%';
+
+}
+
+alert('تم تنزيل صوت السورة.');
+
+}
+
+}catch(e){
+
+alert(
+'تعذر تنزيل الصوت. حاول مرة أخرى مع اتصال إنترنت جيد.'
+);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent='⬇ تحميل صوت السورة';
+
+setTimeout(()=>{
+progress.classList.add('hidden');
+},1500);
+
+}
+
+};
+
+
+/* =========================
+   حفظ نص السورة
+========================= */
+
+$('saveSurah').onclick=()=>{
+
+if(!curData) return;
+
+localStorage.setItem(
+'quran_'+current,
+JSON.stringify(curData)
+);
+
+let s=
+JSON.parse(
+localStorage.getItem('saved')||'[]'
+);
+
+if(!s.includes(current))
+s.push(current);
+
+localStorage.setItem(
+'saved',
+JSON.stringify(s)
+);
+
+$('qstatus').textContent=
+'حُفظ نص السورة على الجهاز للقراءة دون إنترنت.';
+
+renderSaved();
+
+};
+
+
+/* =========================
+   تنزيل نص السورة
+========================= */
+
+$('downloadText').onclick=()=>{
+
+if(!curDisplayAyahs.length){
+
+alert('لم يتم تحميل السورة بعد.');
+
+return;
+
+}
+
+let text=
+`سورة ${curData.name}\n\n`;
+
+text+=
+'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\n\n';
+
+curDisplayAyahs.forEach(a=>{
+
+text+=
+`${a.text} ۝ ${a.number}\n\n`;
+
+});
+
+if(
+window.NoorAndroid &&
+typeof window.NoorAndroid.saveText==='function'
+){
+
+window.NoorAndroid.saveText(
+`Noor_${current}_${curData.name}.txt`,
+text
+);
+
+}else{
+
+let blob=
+new Blob(
+[text],
+{type:'text/plain;charset=utf-8'}
+);
+
+let url=
+URL.createObjectURL(blob);
+
+let a=
+document.createElement('a');
+
+a.href=url;
+
+a.download=
+`Noor_${current}_${curData.name}.txt`;
+
+a.click();
+
+URL.revokeObjectURL(url);
+
+}
+
+};
+
+
+/* =========================
+   المحفوظات
+========================= */
+
+function renderSaved(){
+
+let s=
+JSON.parse(
+localStorage.getItem('saved')||'[]'
+);
+
+$('savedList').innerHTML=
+s.length?
+
+s.map(n=>
+`<div class="surah">
+<span>
+${n}. ${names[n-1]}
+</span>
+<button onclick="loadSurah(${n});tab('quran')">
+فتح
+</button>
+</div>`
+).join('')
+
+:
+
+'لا توجد سور محفوظة بعد.';
+
+}
+
+
+$('clearSaved').onclick=()=>{
+
+if(
+confirm('حذف فهرس السور المحفوظة؟')
+){
+
+localStorage.removeItem('saved');
+
+renderSaved();
+
+}
+
+};
+
+
+/* =====================================================
+   الأحاديث — صحيح البخاري وصحيح مسلم
+===================================================== */
+
+async function loadHadithDatabase(){
+
+if(hadithLoaded) return;
+
+$('hadithStatus').textContent=
+'جارٍ تحميل قاعدة صحيح البخاري ومسلم…';
+
+try{
+
+const [
+bukhariResponse,
+muslimResponse
+]=await Promise.all([
+
+fetch('hadith/bukhari.json'),
+
+fetch('hadith/muslim.json')
+
+]);
+
+
+if(
+!bukhariResponse.ok ||
+!muslimResponse.ok
+){
+
+throw new Error(
+'Hadith database unavailable'
+);
+
+}
+
+
+const [
+bukhariData,
+muslimData
+]=await Promise.all([
+
+bukhariResponse.json(),
+
+muslimResponse.json()
+
+]);
+
+
+/*
+ المصدر يعرّف كل حديث بهذا الشكل:
+
+{
+ id,
+ chapterId,
+ bookId,
+ arabic,
+ english:{
+   narrator,
+   text
+ }
+}
+
+ونتعامل أيضاً مع أي غلاف Array/Object
+حتى لا يتعطل التطبيق إذا تغير شكل التغليف.
+*/
+
+function extractHadiths(raw){
+
+if(Array.isArray(raw))
+return raw;
+
+if(
+raw &&
+Array.isArray(raw.hadiths)
+)
+return raw.hadiths;
+
+if(
+raw &&
+Array.isArray(raw.data)
+)
+return raw.data;
+
+if(
+raw &&
+Array.isArray(raw.results)
+)
+return raw.results;
+
+if(raw && typeof raw==='object'){
+
+let output=[];
+
+Object.keys(raw).forEach(key=>{
+
+let value=raw[key];
+
+if(Array.isArray(value)){
+
+value.forEach(item=>{
+
+if(
+item &&
+typeof item==='object' &&
+(
+item.arabic ||
+item.text ||
+item.english
+)
+){
+
+output.push(item);
+
+}
+
+});
+
+}
+
+});
+
+return output;
+
+}
+
+return [];
+
+}
+
+
+const bukhari=
+extractHadiths(bukhariData);
+
+const muslim=
+extractHadiths(muslimData);
+
+
+/* البخاري */
+
+bukhari.forEach(h=>{
+
+if(!h || !h.arabic) return;
+
+hadiths.push({
+
+id:h.id,
+
+chapterId:h.chapterId,
+
+bookId:h.bookId,
+
+t:h.arabic,
+
+s:
+`صحيح البخاري — حديث ${h.id??''}`,
+
+k:
+`${h.arabic} ${h.english?.text||''}`,
+
+c:'البخاري',
+
+u:
+`https://sunnah.com/bukhari:${h.id??''}`
+
+});
+
+});
+
+
+/* مسلم */
+
+muslim.forEach(h=>{
+
+if(!h || !h.arabic) return;
+
+hadiths.push({
+
+id:h.id,
+
+chapterId:h.chapterId,
+
+bookId:h.bookId,
+
+t:h.arabic,
+
+s:
+`صحيح مسلم — حديث ${h.id??''}`,
+
+k:
+`${h.arabic} ${h.english?.text||''}`,
+
+c:'مسلم',
+
+u:
+`https://sunnah.com/muslim:${h.id??''}`
+
+});
+
+});
+
+
+if(!hadiths.length){
+
+throw new Error(
+'No hadiths found'
+);
+
+}
+
+
+hadithLoaded=true;
+
+
+$('hadithStatus').textContent=
+`تم تحميل ${hadiths.length.toLocaleString('ar')} حديث من قاعدة البخاري ومسلم.`;
+
+
+showHadith();
+
+
+}catch(e){
+
+console.error(e);
+
+$('hadithStatus').innerHTML=
+`<p class="notice">
+تعذر تحميل قاعدة الأحاديث.
+تأكد من أن ملفات hadith/bukhari.json و hadith/muslim.json موجودة داخل التطبيق ثم أعد بناء APK.
+</p>`;
+
+}
+
+}
+
+
+/* =========================
+   عرض الأحاديث
+========================= */
+
+function showHadith(q=''){
+
+if(!hadithLoaded){
+
+$('hadithResults').innerHTML=
+'<p class="small">جارٍ تحميل الأحاديث…</p>';
+
+return;
+
+}
+
+let col=
+$('hcollection').value;
+
+let query=
+norm(q);
+
+
+let res=
+hadiths.filter(h=>{
+
+let collectionOK=
+!col || h.c===col;
+
+let searchOK=
+!query ||
+norm(
+(h.t||'')+
+' '+
+(h.s||'')+
+' '+
+(h.k||'')+
+' '+
+(h.id||'')
+).includes(query);
+
+retu
