@@ -25,6 +25,26 @@ jobs:
         with:
           gradle-version: "8.9"
 
+      - name: Download complete Sahih Bukhari and Sahih Muslim
+        shell: bash
+        run: |
+          set -e
+
+          mkdir -p app/src/main/assets/hadith
+
+          curl -L --fail --retry 3 \
+            "https://raw.githubusercontent.com/AhmedBaset/hadith-json/v1.2.0/db/by_book/the_9_books/bukhari.json" \
+            -o app/src/main/assets/hadith/bukhari.json
+
+          curl -L --fail --retry 3 \
+            "https://raw.githubusercontent.com/AhmedBaset/hadith-json/v1.2.0/db/by_book/the_9_books/muslim.json" \
+            -o app/src/main/assets/hadith/muslim.json
+
+          test -s app/src/main/assets/hadith/bukhari.json
+          test -s app/src/main/assets/hadith/muslim.json
+
+          echo "Hadith databases downloaded successfully."
+
       - name: Build APK
         run: gradle assembleDebug --no-daemon
 
